@@ -87,7 +87,7 @@ export const excluirHorarioController: RequestHandler = async (req, res) => {
   try {
     const { id } = req.params;
 
-    await excluirHorario(id);
+    await excluirHorario(String(req.params.id));
 
     res.json({
       success: true,

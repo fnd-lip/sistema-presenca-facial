@@ -1,14 +1,13 @@
 import admin from 'firebase-admin';
+import path from 'path';
 
-const caminhoCredencial = process.env.GOOGLE_APPLICATION_CREDENTIALS;
-
-if (!caminhoCredencial) {
-  throw new Error('GOOGLE_APPLICATION_CREDENTIALS não foi definida no .env');
-}
+const serviceAccount = require(
+  path.resolve(__dirname, "../secrets/recognize-students-face-firebase-adminsdk-fbsvc-d6dd734266.json")
+);
 
 if (!admin.apps.length) {
   admin.initializeApp({
-    credential: admin.credential.applicationDefault(),
+    credential: admin.credential.cert(serviceAccount),
   });
 }
 

@@ -24,7 +24,7 @@ export async function cadastrarAlunoController(req: Request, res: Response) {
       });
     }
 
-    if (!req.file) {
+    if (!req.file || !req.file) {
       return res.status(400).json({
         success: false,
         message: 'Imagem facial é obrigatória.',
@@ -38,7 +38,7 @@ export async function cadastrarAlunoController(req: Request, res: Response) {
     const respostaFace = await cadastrarFaceNaApi({
       nome: nomeNormalizado,
       matricula: matriculaNormalizada,
-      arquivo: req.file,
+      arquivo: req.file, // Usar req.file para acessar o arquivo enviado
     });
 
     const aluno = await criarAluno({
@@ -87,7 +87,7 @@ export const excluirAlunoController: RequestHandler = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const aluno = await buscarAlunoPorId(id);
+    const aluno = await buscarAlunoPorId(String(req.params.id));
 
     if (!aluno) {
       res.status(404).json({
@@ -106,7 +106,7 @@ export const excluirAlunoController: RequestHandler = async (req, res) => {
       );
     }
 
-    await excluirAlunoPorId(id);
+    await excluirAlunoPorId(String(req.params.id));
 
     res.json({
       success: true,
